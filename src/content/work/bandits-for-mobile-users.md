@@ -17,11 +17,13 @@ featured: false
 
 ## Problem
 
-Several users share one base station. Each user has a minimum SINR requirement, and each user's transmit power is interference for everyone else. If the base station can send a power-adjustment command to only one user per time step, which user should it pick? Users that move make the problem non-stationary.
+My project for the UT Austin Reinforcement Learning course in Fall 2019: a multi-armed bandit that decides which user in a cell gets the next power-control command. Every user's transmit power is interference for the others, so that choice decides whether the cell meets each user's minimum SINR.
+
+The base station can command only one user per time step, and users that move make the problem non-stationary.
 
 ## Approach
 
-This was my project for the UT Austin Reinforcement Learning course in Fall 2019. I framed it as a multi-armed bandit where each arm is a user.
+I framed it as a multi-armed bandit where each arm is a user.
 
 - **Scenario.** Users are placed at random in a square cell with the base station near the center. Path loss is inverse-square, and SINR includes interference from every other user plus a noise floor. Power is chosen from a discrete grid of levels.
 - **Power update.** The selected user either steps up or down one level (`step`) or jumps toward the power that would exactly meet its target (`direct`). A damping factor δ keeps it from overshooting.

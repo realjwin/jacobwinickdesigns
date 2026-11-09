@@ -9,16 +9,18 @@ summary: A web calculator for the full cost of buying, leasing, or keeping a car
 role: Solo — design, implementation
 stack: [Next.js, React, TypeScript, Tailwind CSS, Vercel]
 order: 3
-featured: true
+featured: false
 ---
 
 ## Problem
 
-Most car calculators compare monthly payments. That leaves out what actually separates two options over several years: fuel type, itemized maintenance, depreciation, Washington's registration math, and what the money would have earned if it hadn't gone into the car. I wanted one page that compares a new purchase or lease against keeping my current car, on equal terms.
+A web calculator, built outside work, that compares buying or leasing a car against keeping my current one over the full ownership horizon. Most car calculators compare monthly payments, which leaves out what actually separates two options over several years.
+
+That means fuel type, itemized maintenance, depreciation, Washington's registration math, and what the money would have earned if it hadn't gone into the car. I wanted all of it on one page, with both options on equal terms.
 
 ## Approach
 
-It's a single-page Next.js app built outside work. All the math lives in one module, `lib/calculations.ts`, and the UI just collects inputs and renders results.
+It's a single-page Next.js app. All the math lives in one module, `lib/calculations.ts`, and the UI just collects inputs and renders results.
 
 - **Acquisition.** For a purchase: price, down payment, trade-in, APR, and term, with a standard amortized monthly payment. For a lease: down payment, monthly payment, and a duration that tracks the comparison horizon. The current car's sale proceeds and their investment growth are credited to the lease side.
 - **Running costs.** Fuel for gas, electric, or plug-in hybrid at separate per-gallon and per-kWh rates. Flat insurance. Maintenance as an itemized list of interval items, charged from the current odometer forward.

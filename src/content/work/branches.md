@@ -9,16 +9,18 @@ summary: A map-first trip planner where the itinerary is a notebook of cells. No
 role: Solo — product spec, architecture, implementation
 stack: [Expo, React Native, Expo Router, TypeScript, Convex, MapLibre, MapTiler, Vercel AI SDK, OpenAI]
 order: 4
-featured: false
+featured: true
 ---
 
 ## Problem
 
-Trip planning ends up split between a notes app, a map, and a camera roll. I wanted one surface where the plan and the map are the same data: write "dinner at a place in a neighborhood at 8pm" and get a pin, without copying it over by hand.
+Branches is a mobile trip planner I'm building outside work, where the itinerary is a notebook of cells and an LLM turns text into real places on the map. Trip planning usually ends up split across a notes app, a map, and a camera roll, and nothing connects them.
+
+I wanted one surface where the plan and the map are the same data: write "dinner at a place in a neighborhood at 8pm" and get a pin, without copying it over by hand.
 
 ## Approach
 
-I built this outside work, starting from a written steering spec in the README that records the decisions, data model, and milestones before any code. The core idea is an itinerary that behaves like a Jupyter notebook.
+I started from a written steering spec in the README that records the decisions, data model, and milestones before any code. The core idea is an itinerary that behaves like a Jupyter notebook.
 
 - **Cells.** An itinerary is an ordered list of typed cells: `note`, `place`, `media`, `transit`, `ai`, and `day`. Each has a JSON payload, an optional cached `output`, and a `staleAt` timestamp. An AI cell shows **Run**, or **Re-run** once it is stale or has output, the way a notebook cell does.
 - **Text → map.** A note cell can be scanned for places. A server action makes a forced tool call to the model to pull out concrete place mentions, and each candidate is geocoded through MapTiler. Accepting the inline chip appends a `place` cell, and the pin shows up on the map through Convex's reactive queries.

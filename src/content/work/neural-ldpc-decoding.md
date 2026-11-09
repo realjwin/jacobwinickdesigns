@@ -18,9 +18,9 @@ featured: true
 
 ## Problem
 
-This was my M.S. thesis research at UT Austin: ML-assisted LDPC decoding, built from belief propagation and deep neural networks.
+This is the thesis work from my M.S. at UT Austin: an LDPC receiver where a neural network learns the soft inputs from coarsely quantized samples, and belief propagation is unrolled into a trainable network. Low-resolution ADCs save power, but they break the soft information that standard decoders depend on.
 
-A receiver with low-resolution ADCs hands the decoder a distorted view of the signal. The standard log-likelihood ratios (LLRs) assume an unquantized AWGN channel, so after coarse quantization they are the wrong input for belief propagation. I wanted to know whether a network could learn better LLRs from the quantized samples, and whether the decoder itself could be trained along with it.
+The standard log-likelihood ratios (LLRs) assume an unquantized AWGN channel, so after coarse quantization they are the wrong input for belief propagation. I wanted to know whether a network could learn better LLRs from the quantized samples, and whether the decoder itself could be trained along with it.
 
 ## Approach
 

@@ -11,7 +11,7 @@ export const person = {
   ],
   headline: 'Engineering manager & wireless systems engineer',
   summary:
-    'Joined Amazon Leo (formerly Project Kuiper) as one of its first 100 employees and carried its custom modem silicon from MATLAB simulation through seven chip iterations to production firmware operating on orbit. Now leading a seven-person modem embedded firmware team and building AI-first agentic test infrastructure. Machine learning research background at UT Austin and Intel Labs.',
+    'Joined Amazon Leo (formerly Project Kuiper) as one of its first 100 employees and carried its custom modem silicon from MATLAB simulation through seven chip iterations to production firmware operating on orbit. Now leading a seven-person modem embedded firmware team and building AI-first agentic test infrastructure. Machine learning research background at UT Austin and Intel Labs, and internships across Apple, Microsoft, MIT Lincoln Laboratory, and Astranis.',
   seeking:
     'Looking to help bring frontier AI to people the way satellite internet reached them: from early prototype to product at scale.',
 };
@@ -32,7 +32,7 @@ export const leo = {
         'Hands-on owner of gateway MIMO: validated the existing implementation, fixed channel-estimate message processing, found and fixed a missed-detection bug, and enabled gateway downlink MIMO and SISO-to-MIMO switching on production hardware.',
         'Found several gen-1 silicon bugs through on-orbit and lab analysis; drove fixes into gen-2 and validated them in emulation ahead of tapeout.',
         'Delivered on-orbit uplink BLER analysis to VP-level leadership to guide link performance decisions.',
-        'Grew the team from 3 to 7 engineers plus 2 interns in one quarter; hired contractors through two agencies; ran the intern program end to end.',
+        'Grew the team from 3 to 7 engineers plus 2 interns in one quarter; hired contractors through two agencies; ran the intern program and turned around a struggling internship with AI tooling and object-oriented practices.',
         'Drive AI-tool adoption across the team (Claude Code, a team LLM wiki) for test generation, log analysis, and firmware development.',
       ],
     },
@@ -41,8 +41,8 @@ export const leo = {
       dates: 'Jun 2025 – May 2026',
       bullets: [
         'Owned customer-terminal downlink PHY: feature development, bring-up, and production code.',
-        'Refactored the customer-terminal downlink PHY firmware from bring-up code to production quality, adding telemetry, failure handling, and silicon errata workarounds.',
-        'Partnered with systems, MAC software, and RF antenna teams to validate full-stack satellite and terminal software for uptime and throughput.',
+        'Delivered a full refactor of the customer-terminal downlink PHY firmware from bring-up code to production quality, adding telemetry, failure handling, and silicon errata workarounds.',
+        'Partnered with systems, MAC software, and RF antenna teams to validate full-stack satellite and terminal software for maximum uptime and throughput.',
         'Led on-orbit PHY data analysis: built a layer-1 analysis tool and triaged daily on-orbit failures across PHY lockup, raster scan, beam pointing, and satellite anomalies.',
       ],
     },
@@ -51,8 +51,8 @@ export const leo = {
       dates: 'Mar 2020 – Jun 2025',
       bullets: [
         'Designed and developed the MATLAB modem simulation for Leo’s proprietary waveform, including a refactor to a multi-TTI architecture.',
-        'Architected modem verification infrastructure and data pipelines from scratch in Python, MATLAB, and AWS: test-suite framework, testpoint data pipeline, register configuration, lab waveform injection, and cloud regression.',
-        'Led post-silicon PHY bring-up for the modem team across seven iterations of custom modem silicon; built lab test infrastructure and integrated with custom digital beamforming chips.',
+        'Architected modem verification infrastructure and data pipelines from scratch in Python, MATLAB, and AWS: test-suite framework, testpoint data pipeline, register configuration infrastructure, lab waveform injection toolchain, and cloud regression. Partnered with ASIC RTL and pre-silicon verification teams on satellite downlink, terminal receive, and gateway.',
+        'Led post-silicon PHY bring-up for the modem team across seven iterations of custom modem silicon; built lab test infrastructure from scratch and integrated with custom digital beamforming chips.',
         'Implemented and validated modem firmware algorithms and controls for the satellite downlink and customer terminals, including emulation-based testing.',
         'Early employee (<100) through the full lifecycle from concept to an operating constellation; watched the first prototype satellites launch on Atlas V at Cape Canaveral.',
       ],

@@ -1,7 +1,7 @@
 {
   "ldpc-ber": {
     "title": "Neural LLR estimation under 3-bit quantization",
-    "caption": "Coded bit error rate of a (64,32) LDPC code over a 32-subcarrier QPSK OFDM link in AWGN, decoded with belief propagation. With 3-bit quantized samples, LLRs computed directly from the quantized signal hit an error floor that worsens above about 13 dB, while LLRs estimated by a neural network from the same samples keep falling, ending roughly 100x lower at 30 dB (the network is slightly worse below about 12 dB).",
+    "caption": "Coded bit error rate of a (64,32) LDPC code over a 32-subcarrier QPSK OFDM link in AWGN, decoded with belief propagation. With 3-bit quantized samples, LLRs computed directly from the quantized signal hit an error floor that worsens above about 13 dB, while LLRs estimated by a neural network from the same samples keep falling, ending roughly 100x lower at 30 dB (the network is slightly worse below about 13 dB).",
     "xLabel": "SNR (dB)",
     "yLabel": "Bit error rate",
     "yScale": "log",

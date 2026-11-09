@@ -18,7 +18,9 @@ featured: true
 
 ## Problem
 
-Low-bit ADCs save power and cost, but they clip and coarsen the received signal before the receiver can do anything with it. A conventional OFDM detector still computes LLRs as though the samples were clean, and then the channel decoder works from bad soft information. The question was how far a learned detector could recover from 1, 3, or 5 bits of resolution, and how sensitive that is to where the ADC clips.
+A neural detector that computes LLRs for OFDM receivers behind 1-, 3-, and 5-bit ADCs, the follow-on to my thesis work. Low-bit ADCs save power and cost, but they clip the signal, and a conventional detector then hands the decoder bad soft information.
+
+The question was how far a learned detector could recover from 1, 3, or 5 bits of resolution, and how sensitive that is to where the ADC clips.
 
 ## Approach
 

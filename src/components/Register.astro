@@ -13,29 +13,35 @@ const statusText = { released: 'Released', 'in-progress': 'In progress', placeho
 const groups = grouped
   ? series.map((s) => ({ ...s, items: entries.filter((e) => e.data.discipline === s.key).sort((a, b) => a.data.dwg.localeCompare(b.data.dwg)) })).filter((g) => g.items.length)
   : [{ key: 'all', name: '', items: entries }];
+// Discipline is redundant once rows are grouped by series.
+const cols = grouped ? 5 : 6;
 ---
-<table class="register">
+<table class={`register${grouped ? ' grouped' : ''}`}>
   <caption class="visually-hidden">{caption}</caption>
   <thead>
-    <tr><th scope="col">Dwg no.</th><th scope="col">Title</th><th scope="col">Discipline</th><th scope="col">Year</th><th scope="col">Rev</th><th scope="col">Status</th></tr>
+    <tr>
+      <th scope="col">Dwg no.</th><th scope="col">Title</th>
+      {!grouped && <th scope="col" class="c-meta">Discipline</th>}
+      <th scope="col" class="c-meta">Year</th><th scope="col" class="c-meta">Rev</th><th scope="col" class="c-status">Status</th>
+    </tr>
   </thead>
   <tbody>
     {groups.map((g) => (
       <>
-        {grouped && <tr class="series-head"><td colspan="6" class="label">{g.name}</td></tr>}
-        {g.items.map((e) => {
-          const href = `/work/${e.id}`;
-          return (
-            <tr class={e.data.status === 'placeholder' ? 'pending' : undefined} data-dim>
-              <td class="c-dwg"><a class="row-link" href={href} tabindex="-1" aria-hidden="true">{e.data.dwg}</a></td>
-              <td class="c-title"><a class="row-link" href={href}>{e.data.title}<span class="sum">{e.data.summary}</span></a></td>
-              <td class="c-meta"><a class="row-link" href={href} tabindex="-1" aria-hidden="true">{e.data.discipline}</a></td>
-              <td class="c-meta"><a class="row-link" href={href} tabindex="-1" aria-hidden="true">{e.data.year}</a></td>
-              <td class="c-meta"><a class="row-link" href={href} tabindex="-1" aria-hidden="true">{e.data.rev}</a></td>
-              <td class="c-meta c-status"><a class="row-link" href={href} tabindex="-1" aria-hidden="true"><span class={`status ${e.data.status}`}>{statusText[e.data.status]}</span></a></td>
-            </tr>
-          );
-        })}
+        {grouped && <tr class="series-head"><th colspan={cols} scope="colgroup" class="label">{g.name}</th></tr>}
+        {g.items.map((e) => (
+          <tr class={e.data.status === 'placeholder' ? 'pending' : undefined} data-dim>
+            <td class="c-dwg">{e.data.dwg}</td>
+            <td class="c-title">
+              <a class="row-link" href={`/work/${e.id}`}>{e.data.title}</a>
+              <span class="sum">{e.data.summary}</span>
+            </td>
+            {!grouped && <td class="c-meta">{e.data.discipline}</td>}
+            <td class="c-meta">{e.data.year}</td>
+            <td class="c-meta">{e.data.rev}</td>
+            <td class="c-status"><span class={`status ${e.data.status}`}>{statusText[e.data.status]}</span></td>
+          </tr>
+        ))}
       </>
     ))}
   </tbody>

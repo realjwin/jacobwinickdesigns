@@ -1,8 +1,9 @@
 ---
-import '@fontsource-variable/space-grotesk';
-import '@fontsource-variable/jetbrains-mono';
-import '@fontsource-variable/source-serif-4';
+import '../styles/fonts.css';
 import '../styles/global.css';
+import fGrotesk from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+import fMono from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
+import fSerif from '@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2?url';
 import { person } from '../data/resume';
 
 interface Props {
@@ -46,6 +47,7 @@ const zonesV = ['A', 'B', 'C', 'D', 'E', 'F'];
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {[fGrotesk, fMono, fSerif].map((f) => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin />)}
     <meta name="theme-color" content="#eef0ea" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f2140" media="(prefers-color-scheme: dark)" />
     <meta property="og:title" content={pageTitle} />
@@ -101,8 +103,8 @@ const zonesV = ['A', 'B', 'C', 'D', 'E', 'F'];
                 <span class="n">{n.n}</span>{n.label}
               </a>
             ))}
-            <button class="theme-toggle" type="button" data-dim aria-label="Toggle blueprint (dark) mode">
-              <span class="sw" aria-hidden="true"></span><span class="tt-label">Blueprint</span>
+            <button class="theme-toggle" type="button" data-dim>
+              <span class="sw" aria-hidden="true"></span><span class="visually-hidden">Switch to </span><span class="tt-label">Blueprint</span><span class="visually-hidden"> mode</span>
             </button>
           </nav>
         </header>
@@ -121,7 +123,7 @@ const zonesV = ['A', 'B', 'C', 'D', 'E', 'F'];
             </slot>
             <p class="label" style="margin:0">© {new Date().getFullYear()} Jacob Winick. All dimensions in px unless noted.</p>
           </div>
-          <div class="titleblock" aria-label="Title block">
+          <div class="titleblock">
             <div class="tb-cell big span-4"><span class="k">Title</span><span class="v">{title}</span></div>
             <div class="tb-cell span-2 end"><span class="k">Dwg no.</span><span class="v red">{dwg}</span></div>
             <div class="tb-cell span-2"><span class="k">Drawn by</span><span class="v">J. Winick</span></div>

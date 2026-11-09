@@ -14,9 +14,10 @@ const featured = (await getCollection('work', (e) => e.data.featured)).sort((a, 
       <h1 id="hero-title">Jacob<br />Winick</h1>
       <p class="lede">
         I build satellite modems. As one of the first hundred employees at{' '}
-        <strong>Amazon Leo</strong>, I carried its custom modem silicon from a MATLAB
-        simulation through seven chip iterations to production firmware running on satellites.
-        Now I lead a firmware team and build AI-first, agentic test infrastructure for it.
+        <strong>Amazon Leo</strong>, I carried its custom modem silicon from MATLAB
+        simulation through seven chip iterations to production firmware on orbit.
+        Now I lead a seven-person firmware team and build AI-first, agentic test infrastructure.
+        I started in machine-learning research, and next I want to help bring frontier AI to product.
       </p>
       <ol class="callouts" aria-label="Key notes">
         <li><span class="balloon" aria-hidden="true">1</span><span><b>Engineering manager</b>, modem systems embedded firmware, Amazon Leo</span></li>
@@ -64,7 +65,7 @@ const featured = (await getCollection('work', (e) => e.data.featured)).sort((a, 
     <div>
       <h2 class="label">General notes</h2>
       <ol class="gnotes">
-        <li>Detail work is in Python, C/C++ and MATLAB unless noted.</li>
+        <li>Each drawing lists its stack under Materials in the title block.</li>
         <li>This sheet is the current revision and supersedes jacobwinick.com (2019).</li>
         <li>Off the clock: backcountry skiing, bikepacking, sailing, film photography, violin and saxophone. A camper van is under construction. See <a href="/about">About</a>.</li>
       </ol>
@@ -106,6 +107,7 @@ const featured = (await getCollection('work', (e) => e.data.featured)).sort((a, 
 
   .intro { color: var(--ink-2); max-width: 60ch; margin-top: -8px; }
 
+  .revtable td:nth-child(2) { white-space: nowrap; }
   .notes-rev { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
   .gnotes { margin: 10px 0 0; padding-left: 1.4em; font-size: 0.95rem; color: var(--ink-2); display: grid; gap: 6px; }
   .gnotes li::marker { font-family: var(--f-mono); color: var(--ink-3); font-size: 0.8em; }

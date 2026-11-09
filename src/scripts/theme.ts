@@ -8,10 +8,10 @@ const current = (): 'light' | 'dark' =>
 function paint() {
   const t = current();
   document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((b) => {
-    b.setAttribute('aria-pressed', String(t === 'dark'));
+    // The button names the action ("Switch to Vellum mode"). No aria-pressed:
+    // a pressed state plus a label that flips would announce contradictions.
     const l = b.querySelector('.tt-label');
     if (l) l.textContent = t === 'dark' ? 'Vellum' : 'Blueprint';
-    b.setAttribute('aria-label', t === 'dark' ? 'Switch to vellum (light) mode' : 'Switch to blueprint (dark) mode');
   });
 }
 
@@ -20,6 +20,11 @@ document.addEventListener('click', (e) => {
   if (!btn) return;
   const next = current() === 'dark' ? 'light' : 'dark';
   root.dataset.theme = next;
+  document.querySelector('meta[name="theme-color"]:not([media])')?.remove();
+  const m = document.createElement('meta');
+  m.name = 'theme-color';
+  m.content = next === 'dark' ? '#0f2140' : '#eef0ea';
+  document.head.prepend(m); // first matching theme-color wins
   try { localStorage.setItem('jw-theme', next); } catch {}
   paint();
 });

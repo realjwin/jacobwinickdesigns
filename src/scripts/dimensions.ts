@@ -118,8 +118,11 @@ document.addEventListener('pointerout', (e) => {
   if (t && t !== to) hide(t);
 });
 document.addEventListener('focusin', (e) => {
-  const t = (e.target as Element).closest('[data-dim]');
-  if (t && (t as HTMLElement).matches(':focus-visible')) show(t);
+  // Test the focused element itself: the [data-dim] ancestor (e.g. a register
+  // <tr>) is never :focus-visible.
+  const target = e.target as Element;
+  const t = target.closest('[data-dim]');
+  if (t && target.matches(':focus-visible')) show(t);
 });
 document.addEventListener('focusout', (e) => {
   const t = (e.target as Element).closest('[data-dim]');

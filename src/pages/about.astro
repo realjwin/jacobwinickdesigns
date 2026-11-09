@@ -9,21 +9,21 @@ import { person, education, interests } from '../data/resume';
       <h1 class="page-title">About</h1>
       <div class="prose">
         <p>
-          I'm an engineering manager and wireless systems engineer in Seattle. After finishing my M.S. at UT Austin in 2019, I left its PhD program to join Project Kuiper, now Amazon Leo, in March 2020 as one of its first hundred employees.
+          I'm an engineering manager and wireless systems engineer in Seattle. I joined Project Kuiper, now Amazon Leo, in March 2020 as one of its first hundred employees. Before that I did machine-learning research for wireless at UT Austin. I finished my M.S. there in 2019 and left the PhD program early to join Kuiper.
         </p>
         <p>
-          Since then I've worked on the modem at every stage. I wrote the MATLAB simulation of the waveform and built
-          the verification infrastructure that checked the silicon against it. I led PHY bring-up across seven chip
-          iterations and refactored the customer-terminal downlink firmware into production code. Now I triage what
-          the satellites report from orbit. I watched the first prototype satellites launch on an Atlas V from Cape Canaveral.
+          At Leo I've worked on the modem at every stage, from simulation to orbit. I built the MATLAB simulation of the
+          waveform and architected the modem verification infrastructure. I led PHY bring-up across seven chip
+          iterations and refactored the customer-terminal downlink firmware into production code. Then I led analysis
+          of the PHY data the satellites send back from orbit. I watched the first prototype satellites launch on an Atlas V from Cape Canaveral.
         </p>
         <p>
-          Today I lead a firmware team of seven engineers. Much of our newest work is AI-first test infrastructure,
-          where agents write tests, read logs and help develop firmware. That work is why I'm looking at what comes next: helping bring frontier AI to people the way satellite internet reached them, from early prototype to product at scale.
+          Today I lead a modem firmware team of seven engineers. One of our four charters is AI-first, agentic test
+          infrastructure, and I'm driving the team's use of AI tools for test generation, log analysis and firmware development. That work is why I'm looking at what comes next: helping bring frontier AI to people the way satellite internet reached them, from early prototype to product at scale.
         </p>
         <p>
-          Before Leo I did machine-learning research for wireless: neural decoders for LDPC codes at UT Austin,
-          and traffic classification at Intel Labs. Earlier internships took me to Astranis, Apple, Microsoft and
+          My research was ML-assisted LDPC decoding at UT Austin: neural networks that learn LLRs from quantized
+          samples, and belief propagation unrolled into a trainable network. At Intel Labs I built a deep-learning traffic classifier. Earlier internships took me to Astranis, Apple, Microsoft and
           MIT Lincoln Laboratory, and I built CubeSat electronics in the Michigan eXploration Laboratory.
           The <a href="/work">drawing register</a> has the research and the projects I build outside work.
         </p>
@@ -65,6 +65,7 @@ import { person, education, interests } from '../data/resume';
   .gnotes li::marker { font-family: var(--f-mono); color: var(--red); font-size: 0.8em; }
   .contact { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; font-family: var(--f-mono); font-size: 0.8rem; overflow-wrap: anywhere; }
   .edu td:first-child { color: var(--ink); width: auto; }
+  .edu td:nth-child(3) { white-space: nowrap; }
   .edu td.n { text-transform: none; font-family: var(--f-body); font-size: 0.9rem; letter-spacing: 0; }
   @media (max-width: 860px) {
     .about { grid-template-columns: 1fr; }

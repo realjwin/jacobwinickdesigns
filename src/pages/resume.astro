@@ -87,8 +87,27 @@ import { person, leo, education, earlier, skills } from '../data/resume';
   .skills dd { margin: 4px 0 0; font-size: 0.95rem; }
   @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
   @media print {
-    .print { display: none; }
-    .region { padding: 12px 0 !important; }
-    .page-title { font-size: 2rem; }
+    /* Two letter pages: drop the sheet chrome, tighten the rhythm, and undo
+       the narrow-viewport breakpoints (a printed page is ~720px wide). */
+    :global(.masthead), :global(.titleblock-row), .print { display: none; }
+    .region { padding: 8px 0 !important; }
+    .region + .region { border-top-width: 0.75px; }
+    .page-title { font-size: 20pt; margin: 2px 0 2px; }
+    .label { font-size: 7.2pt; }
+    .r-summary { font-size: 9.5pt; margin-top: 6px; max-width: none; }
+    .section-head { margin-bottom: 6px; }
+    .section-head h2 { font-size: 13pt; }
+    .roles { gap: 8px; }
+    .role-head { margin-bottom: 3px; padding-bottom: 1px; }
+    .role-head h3 { font-size: 10pt; }
+    .roles ul { gap: 1px; max-width: none; font-size: 9.2pt; line-height: 1.32; }
+    .two { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .edu { margin-bottom: 8px; }
+    .earlier { gap: 5px; }
+    .deg { font-size: 7.5pt; margin-bottom: 2px; }
+    .sm { font-size: 8.8pt; line-height: 1.32; margin-bottom: 2px; }
+    .skills { grid-template-columns: repeat(3, 1fr); }
+    .skills div { padding: 5px 8px 6px; }
+    .skills dd { font-size: 8.8pt; line-height: 1.3; }
   }
 </style>

@@ -73,7 +73,7 @@ const statusText = { released: 'Released', 'in-progress': 'In progress', placeho
   .spec dl > div:nth-child(odd):not(.wide) { border-right: 0.75px solid var(--ink); }
   .spec dl > div.wide { grid-column: 1 / -1; }
   .spec dl > div:last-child { border-bottom: 0; }
-  .spec dt { font-family: var(--f-mono); font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
+  .spec dt { font-family: var(--f-mono); font-size: var(--k-size); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
   .spec dd { margin: 2px 0 0; font-family: var(--f-mono); font-size: 0.76rem; overflow-wrap: anywhere; }
   .spec dd a { display: block; }
   .case-fig { margin-bottom: 32px; max-width: 760px; }
@@ -82,7 +82,7 @@ const statusText = { released: 'Released', 'in-progress': 'In progress', placeho
   .pager .nx { text-align: right; align-items: flex-end; }
   .pt { font-family: var(--f-head); font-size: 1.1rem; }
   @media (max-width: 860px) {
-    .case { grid-template-columns: 1fr; }
+    .case { grid-template-columns: minmax(0, 1fr); }
     .spec { position: static; }
   }
 </style>

@@ -130,4 +130,12 @@ const descId = `fig-${id}-desc`;
   figcaption { border-top: 0.75px solid var(--ink); padding: 10px 16px 12px; font-size: 0.9rem; color: var(--ink-2); line-height: 1.5; }
   figcaption strong { color: var(--ink); font-weight: 600; }
   .src { display: block; margin-top: 6px; color: var(--ink-3); }
+  /* The 640-unit viewBox shrinks ~2x on phones; scale the type back up so
+     tick labels stay ~9px on screen. */
+  @media (max-width: 600px) {
+    .plot > svg { padding: 6px 4px 0; }
+    .tk { font-size: 16px; }
+    .tk tspan { font-size: 11px; }
+    .ax { font-size: 15px; letter-spacing: 0.04em; }
+  }
 </style>

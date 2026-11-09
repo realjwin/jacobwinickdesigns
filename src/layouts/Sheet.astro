@@ -1,0 +1,145 @@
+---
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/jetbrains-mono';
+import '@fontsource-variable/source-serif-4';
+import '../styles/global.css';
+import { person } from '../data/resume';
+
+interface Props {
+  title: string;          // page title (shown in title block + <title>)
+  description?: string;
+  dwg: string;            // drawing number, e.g. "A-001"
+  rev?: string;
+  sheet?: string;         // e.g. "1 OF 4"
+  scale?: string;
+}
+
+const {
+  title,
+  description = 'Jacob Winick — engineering manager and wireless systems engineer. Satellite modems, machine learning, and things built outside work.',
+  dwg,
+  rev = 'A',
+  sheet = '1 OF 1',
+  scale = '1:1',
+} = Astro.props;
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const nav = [
+  { href: '/', label: 'Index', n: '00' },
+  { href: '/work', label: 'Work', n: '01' },
+  { href: '/about', label: 'About', n: '02' },
+  { href: '/resume', label: 'Résumé', n: '03' },
+];
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path === href || path.startsWith(href + '/'));
+const date = new Date().toISOString().slice(0, 10);
+const pageTitle = path === '/' ? 'Jacob Winick Designs' : `${title} — Jacob Winick Designs`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const zonesH = [1, 2, 3, 4, 5, 6, 7, 8];
+const zonesV = ['A', 'B', 'C', 'D', 'E', 'F'];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#eef0ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f2140" media="(prefers-color-scheme: dark)" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <script is:inline>
+      try {
+        var t = localStorage.getItem('jw-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="sheet">
+      <div class="zones" aria-hidden="true">
+        {zonesH.map((z, i) => (
+          <>
+            <span class="t" style={`left:${((i + 0.5) / zonesH.length) * 100}%`}>{z}</span>
+            <span class="b" style={`left:${((i + 0.5) / zonesH.length) * 100}%`}>{z}</span>
+            {i > 0 && <i class="tick-h" style={`left:${(i / zonesH.length) * 100}%`}></i>}
+            {i > 0 && <i class="tick-h bot" style={`left:${(i / zonesH.length) * 100}%`}></i>}
+          </>
+        ))}
+        {zonesV.map((z, i) => (
+          <>
+            <span class="l" style={`top:${((i + 0.5) / zonesV.length) * 100}%`}>{z}</span>
+            <span class="r" style={`top:${((i + 0.5) / zonesV.length) * 100}%`}>{z}</span>
+            {i > 0 && <i class="tick-v" style={`top:${(i / zonesV.length) * 100}%`}></i>}
+            {i > 0 && <i class="tick-v rgt" style={`top:${(i / zonesV.length) * 100}%`}></i>}
+          </>
+        ))}
+      </div>
+
+      <div class="sheet-inner">
+        <header class="masthead">
+          <a class="mark" href="/" data-dim aria-label="Jacob Winick Designs — home">
+            <svg viewBox="0 0 28 28" aria-hidden="true">
+              <rect x="0.75" y="0.75" width="26.5" height="26.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+              <path d="M9 6.5v10.5a3.5 3.5 0 0 1-7 0" fill="none" stroke="currentColor" stroke-width="1.5" transform="translate(3 0)" />
+              <path d="M14.5 6.5l2.4 15 2.6-10 2.6 10 2.4-15" fill="none" stroke="var(--red)" stroke-width="1.5" stroke-linejoin="miter" transform="translate(-1.5 0)" />
+            </svg>
+            <span>
+              <span class="mark-name">JACOB WINICK</span>
+              <span class="mark-sub label">Designs · Seattle, WA</span>
+            </span>
+          </a>
+          <nav class="nav" aria-label="Primary">
+            {nav.map((n) => (
+              <a href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined} data-dim>
+                <span class="n">{n.n}</span>{n.label}
+              </a>
+            ))}
+            <button class="theme-toggle" type="button" data-dim aria-label="Toggle blueprint (dark) mode">
+              <span class="sw" aria-hidden="true"></span><span class="tt-label">Blueprint</span>
+            </button>
+          </nav>
+        </header>
+
+        <main id="main">
+          <slot />
+        </main>
+
+        <footer class="titleblock-row">
+          <div class="tb-left">
+            <slot name="footer-left">
+              <div class="contact-links">
+                <a href={`mailto:${person.email}`} data-dim>Email</a>
+                {person.links.map((l) => <a href={l.href} data-dim rel="me">{l.label}</a>)}
+              </div>
+            </slot>
+            <p class="label" style="margin:0">© {new Date().getFullYear()} Jacob Winick. All dimensions in px unless noted.</p>
+          </div>
+          <div class="titleblock" aria-label="Title block">
+            <div class="tb-cell big span-4"><span class="k">Title</span><span class="v">{title}</span></div>
+            <div class="tb-cell span-2 end"><span class="k">Dwg no.</span><span class="v red">{dwg}</span></div>
+            <div class="tb-cell span-2"><span class="k">Drawn by</span><span class="v">J. Winick</span></div>
+            <div class="tb-cell"><span class="k">Rev</span><span class="v">{rev}</span></div>
+            <div class="tb-cell"><span class="k">Scale</span><span class="v">{scale}</span></div>
+            <div class="tb-cell span-2 end"><span class="k">Sheet</span><span class="v">{sheet}</span></div>
+            <div class="tb-cell span-3 last-row"><span class="k">Firm</span><span class="v">Jacob Winick Designs</span></div>
+            <div class="tb-cell span-3 last-row end"><span class="k">Date</span><span class="v">{date}</span></div>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <svg id="dim-layer" aria-hidden="true"></svg>
+
+    <script>
+      import '../scripts/dimensions.ts';
+      import '../scripts/theme.ts';
+    </script>
+  </body>
+</html>

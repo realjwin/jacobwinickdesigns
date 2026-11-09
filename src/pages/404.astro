@@ -1,0 +1,15 @@
+---
+import Sheet from '../layouts/Sheet.astro';
+---
+<Sheet title="Sheet not found" dwg="A-404" sheet="— OF 4">
+  <section class="region nf">
+    <p class="label"><span class="red">Sheet A-404</span> · Not in register</p>
+    <h1>This sheet isn't in the set.</h1>
+    <p>The drawing you asked for was never issued, or it has been superseded.</p>
+    <p><a href="/">Back to the general arrangement →</a> &nbsp; <a href="/work">Drawing register →</a></p>
+  </section>
+</Sheet>
+<style>
+  .nf h1 { font-size: clamp(2rem, 5vw, 3.6rem); letter-spacing: -0.03em; margin: 14px 0 16px; }
+  .nf { min-height: 50vh; }
+</style>

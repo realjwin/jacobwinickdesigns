@@ -1,0 +1,75 @@
+---
+import Sheet from '../layouts/Sheet.astro';
+import { person, education, interests } from '../data/resume';
+---
+<Sheet title="About" dwg="A-003" sheet="3 OF 4" description="About Jacob Winick: satellite modem engineer, engineering manager, and builder.">
+  <section class="region about">
+    <div class="about-main">
+      <p class="label"><span class="red">Sheet A-003</span> · About</p>
+      <h1 class="page-title">About</h1>
+      <div class="prose">
+        <p>
+          I'm an engineering manager and wireless systems engineer in Seattle. After finishing my M.S. at UT Austin in 2019, I left its PhD program to join Project Kuiper, now Amazon Leo, in March 2020 as one of its first hundred employees.
+        </p>
+        <p>
+          Since then I've worked on the modem at every stage. I wrote the MATLAB simulation of the waveform and built
+          the verification infrastructure that checked the silicon against it. I led PHY bring-up across seven chip
+          iterations and refactored the customer-terminal downlink firmware into production code. Now I triage what
+          the satellites report from orbit. I watched the first prototype satellites launch on an Atlas V from Cape Canaveral.
+        </p>
+        <p>
+          Today I lead a firmware team of seven engineers. Much of our newest work is AI-first test infrastructure,
+          where agents write tests, read logs and help develop firmware. That work is why I'm looking at what comes next: helping bring frontier AI to people the way satellite internet reached them, from early prototype to product at scale.
+        </p>
+        <p>
+          Before Leo I did machine-learning research for wireless: neural decoders for LDPC codes at UT Austin,
+          and traffic classification at Intel Labs. Earlier internships took me to Astranis, Apple, Microsoft and
+          MIT Lincoln Laboratory, and I built CubeSat electronics in the Michigan eXploration Laboratory.
+          The <a href="/work">drawing register</a> has the research and the projects I build outside work.
+        </p>
+      </div>
+    </div>
+
+    <aside class="about-side">
+      <h2 class="label">General notes</h2>
+      <ol class="gnotes">
+        {interests.map((i) => <li>{i}.</li>)}
+      </ol>
+      <h2 class="label" style="margin-top:28px">Contact</h2>
+      <ul class="contact">
+        <li><a href={`mailto:${person.email}`} data-dim>{person.email}</a></li>
+        {person.links.map((l) => <li><a href={l.href} data-dim rel="me">{l.label} ↗</a></li>)}
+      </ul>
+    </aside>
+  </section>
+
+  <section class="region">
+    <div class="section-head"><h2>Education</h2></div>
+    <table class="revtable edu">
+      <thead><tr><th>School</th><th>Degree</th><th>Date</th><th>Notes</th></tr></thead>
+      <tbody>
+        {education.map((e) => (
+          <tr><td>{e.school}</td><td>{e.degree}</td><td>{e.dates}</td><td class="n">{e.note}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+</Sheet>
+
+<style>
+  .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: clamp(24px, 5vw, 64px); }
+  .page-title { font-size: clamp(2.4rem, 6vw, 4.4rem); letter-spacing: -0.04em; margin: 14px 0 24px; }
+  .prose p { font-size: 1.08rem; }
+  .about-side { padding-top: 8px; }
+  .gnotes { margin: 10px 0 0; padding-left: 1.6em; display: grid; gap: 6px; }
+  .gnotes li::marker { font-family: var(--f-mono); color: var(--red); font-size: 0.8em; }
+  .contact { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; font-family: var(--f-mono); font-size: 0.8rem; overflow-wrap: anywhere; }
+  .edu td:first-child { color: var(--ink); width: auto; }
+  .edu td.n { text-transform: none; font-family: var(--f-body); font-size: 0.9rem; letter-spacing: 0; }
+  @media (max-width: 860px) {
+    .about { grid-template-columns: 1fr; }
+    .edu thead { display: none; }
+    .edu tr, .edu td { display: block; border: 0 !important; padding: 2px 0; }
+    .edu tr { border-top: 0.75px solid var(--ink) !important; padding: 10px 0; }
+  }
+</style>

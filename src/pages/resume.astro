@@ -1,0 +1,94 @@
+---
+import Sheet from '../layouts/Sheet.astro';
+import { person, leo, education, earlier, skills } from '../data/resume';
+---
+<Sheet title="Résumé" dwg="A-004" sheet="4 OF 4" description="Résumé of Jacob Winick: engineering manager, modem systems embedded firmware, Amazon Leo.">
+  <section class="region">
+    <div class="r-head">
+      <div>
+        <p class="label"><span class="red">Sheet A-004</span> · Résumé</p>
+        <h1 class="page-title">{person.name}</h1>
+        <p class="label">{person.headline} · {person.location} · <a href={`mailto:${person.email}`}>{person.email}</a></p>
+      </div>
+      <button class="btn print" type="button" data-dim onclick="window.print()">Print / save PDF</button>
+    </div>
+    <p class="r-summary">{person.summary} {person.seeking}</p>
+  </section>
+
+  <section class="region">
+    <div class="section-head">
+      <h2>{leo.org} <span class="aka">({leo.aka})</span></h2>
+      <span class="label">{leo.place} · {leo.dates}</span>
+    </div>
+    <ol class="roles">
+      {leo.roles.map((r) => (
+        <li>
+          <div class="role-head"><h3>{r.title}</h3><span class="label">{r.dates}</span></div>
+          <ul>{r.bullets.map((b) => <li>{b}</li>)}</ul>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="region two">
+    <div>
+      <div class="section-head"><h2>Education</h2></div>
+      {education.map((e) => (
+        <div class="edu">
+          <div class="role-head"><h3>{e.school}</h3><span class="label">{e.dates}</span></div>
+          <p class="deg">{e.degree} · GPA {e.gpa}</p>
+          <p class="sm">{e.note}</p>
+          <p class="sm muted">Coursework: {e.coursework}</p>
+        </div>
+      ))}
+    </div>
+    <div>
+      <div class="section-head"><h2>Earlier experience</h2></div>
+      <ul class="earlier">
+        {earlier.map((x) => (
+          <li>
+            <div class="role-head"><h3>{x.org}</h3><span class="label">{x.dates}</span></div>
+            <p class="deg">{x.role} · {x.place}</p>
+            {x.note && <p class="sm">{x.note}</p>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="region">
+    <div class="section-head"><h2>Skills</h2></div>
+    <dl class="skills">
+      {skills.map((s) => <div><dt class="label">{s.k}</dt><dd>{s.v}</dd></div>)}
+    </dl>
+  </section>
+</Sheet>
+
+<style>
+  .r-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .page-title { font-size: clamp(2.4rem, 6vw, 4.4rem); letter-spacing: -0.04em; margin: 14px 0 10px; }
+  .r-summary { max-width: 70ch; font-size: 1.08rem; margin: 24px 0 0; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 16px; border: 1px solid var(--ink); background: none; color: var(--ink); cursor: pointer; font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .btn:hover { color: var(--red); border-color: var(--red); }
+  .aka { font-size: 0.6em; color: var(--ink-2); font-weight: 400; letter-spacing: 0; }
+  .roles { list-style: none; margin: 0; padding: 0; display: grid; gap: 28px; }
+  .role-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border-bottom: 0.75px solid var(--hair); padding-bottom: 4px; margin-bottom: 8px; }
+  .role-head h3 { font-size: 1.1rem; }
+  .roles ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; max-width: 80ch; }
+  .roles ul li::marker { color: var(--red); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 56px); }
+  .edu { margin-bottom: 22px; }
+  .deg { margin: 0 0 6px; font-family: var(--f-mono); font-size: 0.78rem; }
+  .sm { font-size: 0.95rem; margin: 0 0 6px; }
+  .muted { color: var(--ink-2); }
+  .earlier { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
+  .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0; margin: 0; border-top: 0.75px solid var(--ink); border-left: 0.75px solid var(--ink); }
+  .skills div { padding: 10px 12px 12px; border-right: 0.75px solid var(--ink); border-bottom: 0.75px solid var(--ink); }
+  .skills dd { margin: 4px 0 0; font-size: 0.95rem; }
+  @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+  @media print {
+    .print { display: none; }
+    .region { padding: 12px 0 !important; }
+    .page-title { font-size: 2rem; }
+  }
+</style>

@@ -1,0 +1,133 @@
+---
+// Server-rendered SVG line plot in the drafting style. No client JS.
+import figures from '../data/figures.json';
+
+interface Props { id: string; n?: number | string }
+const { id, n = 1 } = Astro.props;
+type Series = { name: string; points: [number, number][] };
+type Fig = { title: string; caption: string; xLabel: string; yLabel: string; yScale: 'log' | 'linear'; series: Series[]; source: string };
+const fig = (figures as Record<string, Fig>)[id];
+if (!fig) throw new Error(`Unknown figure ${id}`);
+
+const W = 640, H = 400;
+const m = { l: 62, r: 14, t: 14, b: 50 };
+const pw = W - m.l - m.r, ph = H - m.t - m.b;
+
+const all = fig.series.flatMap((s) => s.points).filter(([, y]) => y > 0 || fig.yScale !== 'log');
+const xs = all.map((p) => p[0]);
+const ys = all.map((p) => p[1]);
+const x0 = Math.min(...xs), x1 = Math.max(...xs);
+const log = fig.yScale === 'log';
+const ty = (v: number) => (log ? Math.log10(v) : v);
+const y0 = log ? Math.floor(Math.log10(Math.min(...ys))) : Math.min(...ys);
+const y1 = log ? Math.ceil(Math.log10(Math.max(...ys))) : Math.max(...ys);
+
+const sx = (x: number) => m.l + ((x - x0) / (x1 - x0)) * pw;
+const sy = (y: number) => m.t + (1 - (ty(y) - y0) / (y1 - y0)) * ph;
+
+const xStep = x1 - x0 > 20 ? 5 : 2;
+const xTicks: number[] = [];
+for (let x = Math.ceil(x0 / xStep) * xStep; x <= x1 + 1e-9; x += xStep) xTicks.push(x);
+
+const decades: number[] = [];
+for (let d = y0; d <= y1; d++) decades.push(d);
+const minors: number[] = [];
+if (log) for (let d = y0; d < y1; d++) for (let k = 2; k <= 9; k++) minors.push(Math.log10(k) + d);
+
+const styles = [
+  { stroke: 'var(--ink-2)', dash: '', w: 1.2, marker: 'circle' },
+  { stroke: 'var(--blue)', dash: '7 3 1.5 3', w: 1.2, marker: 'square' },
+  { stroke: 'var(--ink)', dash: '5 3', w: 1.2, marker: 'tri' },
+];
+// Highlight the learned (NN) curve in red.
+const series = fig.series.map((s, i) => {
+  const nn = /\bNN\b/.test(s.name);
+  const base = styles[i % styles.length];
+  return { ...s, ...(nn ? { stroke: 'var(--red)', dash: '', w: 2, marker: 'diamond' } : base) };
+});
+
+const sup = (d: number) => String(d).replace('-', '−');
+const path = (pts: [number, number][]) =>
+  pts.filter(([, y]) => !log || y > 0).map(([x, y], i) => `${i ? 'L' : 'M'}${sx(x).toFixed(1)},${sy(y).toFixed(1)}`).join('');
+
+const markerStep = (len: number) => (len > 16 ? 3 : 1);
+const titleId = `fig-${id}-title`;
+const descId = `fig-${id}-desc`;
+---
+<figure class="plot">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${titleId} ${descId}`} data-dim>
+    <title id={titleId}>{fig.title}</title>
+    <desc id={descId}>{fig.caption} Series: {series.map((s) => s.name).join('; ')}.</desc>
+
+    <!-- plot frame + grid -->
+    {log && minors.map((v) => {
+      const y = m.t + (1 - (v - y0) / (y1 - y0)) * ph;
+      return <line x1={m.l} x2={m.l + pw} y1={y} y2={y} class="g-minor" />;
+    })}
+    {decades.map((d) => {
+      const y = m.t + (1 - (d - y0) / (y1 - y0)) * ph;
+      return (
+        <>
+          <line x1={m.l} x2={m.l + pw} y1={y} y2={y} class="g-major" />
+          <text x={m.l - 8} y={y} class="tk" text-anchor="end" dominant-baseline="central">
+            {log ? <>10<tspan dy="-5" font-size="8">{sup(d)}</tspan></> : d}
+          </text>
+        </>
+      );
+    })}
+    {xTicks.map((x) => (
+      <>
+        <line x1={sx(x)} x2={sx(x)} y1={m.t} y2={m.t + ph} class="g-major" />
+        <text x={sx(x)} y={m.t + ph + 16} class="tk" text-anchor="middle">{x}</text>
+      </>
+    ))}
+    <rect x={m.l} y={m.t} width={pw} height={ph} class="frame" />
+
+    <!-- series -->
+    {series.map((s) => (
+      <g>
+        <path d={path(s.points)} fill="none" stroke={s.stroke} stroke-width={s.w} stroke-dasharray={s.dash || undefined} stroke-linejoin="round" />
+        {s.points.filter(([, y]) => !log || y > 0).filter((_, i) => i % markerStep(s.points.length) === 0).map(([x, y]) => {
+          const cx = sx(x), cy = sy(y);
+          if (s.marker === 'circle') return <circle cx={cx} cy={cy} r="2.6" class="mk" stroke={s.stroke} />;
+          if (s.marker === 'square') return <rect x={cx - 2.4} y={cy - 2.4} width="4.8" height="4.8" class="mk" stroke={s.stroke} />;
+          if (s.marker === 'tri') return <path d={`M${cx},${cy - 3.2}L${cx + 3},${cy + 2.2}L${cx - 3},${cy + 2.2}Z`} class="mk" stroke={s.stroke} />;
+          return <path d={`M${cx},${cy - 3.6}L${cx + 3.6},${cy}L${cx},${cy + 3.6}L${cx - 3.6},${cy}Z`} fill={s.stroke} stroke={s.stroke} />;
+        })}
+      </g>
+    ))}
+
+    <!-- axis labels -->
+    <text x={m.l + pw / 2} y={H - 10} class="ax" text-anchor="middle">{fig.xLabel}</text>
+    <text x={14} y={m.t + ph / 2} class="ax" text-anchor="middle" transform={`rotate(-90 14 ${m.t + ph / 2})`}>{fig.yLabel}</text>
+  </svg>
+
+  <ul class="legend" aria-hidden="true">
+    {series.map((s) => (
+      <li>
+        <svg width="34" height="10" viewBox="0 0 34 10"><line x1="1" x2="33" y1="5" y2="5" stroke={s.stroke} stroke-width={s.w} stroke-dasharray={s.dash || undefined} /></svg>
+        {s.name}
+      </li>
+    ))}
+  </ul>
+  <figcaption>
+    <span class="label red">Fig. {n}</span> <strong>{fig.title}.</strong> {fig.caption}
+    <span class="src label">Data: {fig.source.split('/')[0]} · redrawn from original plot output</span>
+  </figcaption>
+</figure>
+
+<style>
+  .plot { margin: 0; border: 0.75px solid var(--ink); background: var(--paper); }
+  .plot > svg { width: 100%; height: auto; padding: 10px 10px 0; }
+  .g-major { stroke: var(--hair); stroke-width: 0.6; }
+  .g-minor { stroke: var(--hair); stroke-width: 0.35; opacity: 0.6; }
+  .frame { fill: none; stroke: var(--ink); stroke-width: 1; }
+  .tk { font-family: var(--f-mono); font-size: 10px; fill: var(--ink-2); }
+  .ax { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; fill: var(--ink-2); }
+  .mk { fill: var(--paper); stroke-width: 1; }
+  .legend { list-style: none; margin: 0; padding: 8px 16px 4px; display: flex; flex-wrap: wrap; gap: 4px 20px; font-family: var(--f-mono); font-size: 0.7rem; color: var(--ink-2); }
+  .legend li { display: flex; align-items: center; gap: 8px; }
+  figcaption { border-top: 0.75px solid var(--ink); padding: 10px 16px 12px; font-size: 0.9rem; color: var(--ink-2); line-height: 1.5; }
+  figcaption strong { color: var(--ink); font-weight: 600; }
+  .src { display: block; margin-top: 6px; color: var(--ink-3); }
+</style>

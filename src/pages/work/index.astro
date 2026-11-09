@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import Sheet from '../../layouts/Sheet.astro';
+import Register from '../../components/Register.astro';
+
+const all = await getCollection('work');
+---
+<Sheet title="Drawing register" dwg="A-002" sheet="2 OF 4" description="Projects by Jacob Winick: ML-for-wireless research, software built outside work, and physical builds.">
+  <section class="region">
+    <p class="label"><span class="red">Sheet A-002</span> · Drawing register</p>
+    <h1 class="page-title">Drawing register</h1>
+    <p class="intro">
+      Every project is filed as a drawing. The 100 series is graduate and undergraduate research, the 200 series is software I build outside work,
+      and the 300 series is things I build with my hands. My work at Amazon Leo is in the <a href="/resume">résumé</a>.
+    </p>
+    <Register entries={all} grouped caption="All projects, grouped by series" />
+  </section>
+</Sheet>
+
+<style>
+  .page-title { font-size: clamp(2.4rem, 6vw, 4.4rem); letter-spacing: -0.04em; margin: 14px 0 16px; }
+  .intro { color: var(--ink-2); max-width: 62ch; margin-bottom: 12px; }
+</style>

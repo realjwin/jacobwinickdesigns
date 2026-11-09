@@ -1,0 +1,88 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Sheet from '../../layouts/Sheet.astro';
+import Plot from '../../components/Plot.astro';
+
+export async function getStaticPaths() {
+  const all = (await getCollection('work')).sort((a, b) => a.data.dwg.localeCompare(b.data.dwg));
+  return all.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, prev: all[i - 1] ?? null, next: all[i + 1] ?? null, index: i + 1, total: all.length },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'work'>;
+  prev: CollectionEntry<'work'> | null;
+  next: CollectionEntry<'work'> | null;
+  index: number;
+  total: number;
+}
+const { entry, prev, next, index, total } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+const statusText = { released: 'Released', 'in-progress': 'In progress', placeholder: 'Drawing pending' };
+---
+<Sheet title={d.title} dwg={d.dwg} rev={d.rev} sheet={`${index} OF ${total}`} description={d.summary}>
+  <article class="region case">
+    <header class="case-head">
+      <p class="label"><a href="/work">Register</a> / <span class="red">{d.dwg}</span> · {d.discipline}</p>
+      <h1>{d.title}</h1>
+      <p class="summary">{d.summary}</p>
+    </header>
+
+    <aside class="spec" aria-label="Specification">
+      <dl>
+        <div><dt>Dwg no.</dt><dd class="red">{d.dwg}</dd></div>
+        <div><dt>Rev</dt><dd>{d.rev}</dd></div>
+        <div><dt>Year</dt><dd>{d.year}</dd></div>
+        <div><dt>Status</dt><dd><span class={`status ${d.status}`}>{statusText[d.status]}</span></dd></div>
+        {d.role && <div class="wide"><dt>Role</dt><dd>{d.role}</dd></div>}
+        {d.stack.length > 0 && <div class="wide"><dt>Materials</dt><dd>{d.stack.join(' · ')}</dd></div>}
+        {d.links.length > 0 && (
+          <div class="wide"><dt>Links</dt><dd>{d.links.map((l) => <a href={l.href} data-dim>{l.label} ↗</a>)}</dd></div>
+        )}
+      </dl>
+    </aside>
+
+    <div class="case-body">
+      {d.figure && <div class="case-fig"><Plot id={d.figure} n={1} /></div>}
+      {d.status === 'placeholder' && (
+        <div class="pending-box case-fig" role="img" aria-label="Photographs pending">
+          <span class="tag label">Detail A — photographs pending</span>
+        </div>
+      )}
+      <div class="prose"><Content /></div>
+    </div>
+  </article>
+
+  <nav class="region pager" aria-label="Adjacent drawings">
+    {prev ? <a href={`/work/${prev.id}`} data-dim><span class="label">← {prev.data.dwg}</span><span class="pt">{prev.data.title}</span></a> : <span></span>}
+    {next ? <a href={`/work/${next.id}`} class="nx" data-dim><span class="label">{next.data.dwg} →</span><span class="pt">{next.data.title}</span></a> : <span></span>}
+  </nav>
+</Sheet>
+
+<style>
+  .case { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 24px clamp(24px, 4vw, 56px); }
+  .case-head { grid-column: 1 / -1; }
+  .case-head h1 { font-size: clamp(2.2rem, 5.4vw, 4rem); letter-spacing: -0.04em; margin: 14px 0 12px; max-width: 18ch; }
+  .summary { font-size: clamp(1.05rem, 1.5vw, 1.22rem); color: var(--ink-2); max-width: 46ch; }
+  .spec { align-self: start; position: sticky; top: 16px; }
+  .spec dl { margin: 0; display: grid; grid-template-columns: 1fr 1fr; border: 0.75px solid var(--ink); }
+  .spec dl > div { padding: 7px 10px 9px; border-bottom: 0.75px solid var(--ink); min-width: 0; }
+  .spec dl > div:nth-child(odd):not(.wide) { border-right: 0.75px solid var(--ink); }
+  .spec dl > div.wide { grid-column: 1 / -1; }
+  .spec dl > div:last-child { border-bottom: 0; }
+  .spec dt { font-family: var(--f-mono); font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
+  .spec dd { margin: 2px 0 0; font-family: var(--f-mono); font-size: 0.76rem; overflow-wrap: anywhere; }
+  .spec dd a { display: block; }
+  .case-fig { margin-bottom: 32px; max-width: 760px; }
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .pager a { display: flex; flex-direction: column; gap: 4px; text-decoration: none; padding: 12px 0; }
+  .pager .nx { text-align: right; align-items: flex-end; }
+  .pt { font-family: var(--f-head); font-size: 1.1rem; }
+  @media (max-width: 860px) {
+    .case { grid-template-columns: 1fr; }
+    .spec { position: static; }
+  }
+</style>

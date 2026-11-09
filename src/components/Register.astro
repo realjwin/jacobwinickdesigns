@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { entries: CollectionEntry<'work'>[]; grouped?: boolean; caption: string }
+const { entries, grouped = false, caption } = Astro.props;
+
+const series = [
+  { key: 'research', name: '100 series — Research' },
+  { key: 'software', name: '200 series — Software' },
+  { key: 'build', name: '300 series — Builds' },
+] as const;
+const statusText = { released: 'Released', 'in-progress': 'In progress', placeholder: 'Drawing pending' };
+const groups = grouped
+  ? series.map((s) => ({ ...s, items: entries.filter((e) => e.data.discipline === s.key).sort((a, b) => a.data.dwg.localeCompare(b.data.dwg)) })).filter((g) => g.items.length)
+  : [{ key: 'all', name: '', items: entries }];
+---
+<table class="register">
+  <caption class="visually-hidden">{caption}</caption>
+  <thead>
+    <tr><th scope="col">Dwg no.</th><th scope="col">Title</th><th scope="col">Discipline</th><th scope="col">Year</th><th scope="col">Rev</th><th scope="col">Status</th></tr>
+  </thead>
+  <tbody>
+    {groups.map((g) => (
+      <>
+        {grouped && <tr class="series-head"><td colspan="6" class="label">{g.name}</td></tr>}
+        {g.items.map((e) => {
+          const href = `/work/${e.id}`;
+          return (
+            <tr class={e.data.status === 'placeholder' ? 'pending' : undefined} data-dim>
+              <td class="c-dwg"><a class="row-link" href={href} tabindex="-1" aria-hidden="true">{e.data.dwg}</a></td>
+              <td class="c-title"><a class="row-link" href={href}>{e.data.title}<span class="sum">{e.data.summary}</span></a></td>
+              <td class="c-meta"><a class="row-link" href={href} tabindex="-1" aria-hidden="true">{e.data.discipline}</a></td>
+              <td class="c-meta"><a class="row-link" href={href} tabindex="-1" aria-hidden="true">{e.data.year}</a></td>
+              <td class="c-meta"><a class="row-link" href={href} tabindex="-1" aria-hidden="true">{e.data.rev}</a></td>
+              <td class="c-meta c-status"><a class="row-link" href={href} tabindex="-1" aria-hidden="true"><span class={`status ${e.data.status}`}>{statusText[e.data.status]}</span></a></td>
+            </tr>
+          );
+        })}
+      </>
+    ))}
+  </tbody>
+</table>
